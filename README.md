@@ -16,7 +16,7 @@ your agent audits your site, fixes what's broken, and measures the results.
 
 ## Built on real numbers
 
-This is not theory. The same playbook, applied to a solo-built stock research service:
+This is not theory. The same playbook, applied to [Chickenstock](https://www.chickstockfi.com) — a solo-built Korean stock research service:
 
 - **1.54M search impressions in 30 days** (+85,578% MoM), 7.4K clicks
 - Pages **cited paragraph-by-paragraph by Naver's AI Briefing** (Korea's answer engine)

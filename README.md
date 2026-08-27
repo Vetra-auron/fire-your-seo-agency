@@ -1,95 +1,89 @@
-# 🔥 fire-your-seo-agency
+# 🔥 fire-your-seo-agency — Evidence-first fork
 
 [한국어](./README.ko.md) · **English**
 
-![fire-your-seo-agency](./assets/social-preview.png)
+> A Claude Code skill for SEO and AI-search visibility that separates **official guidance, observed behavior, and experimental hypotheses**.
 
-> **Paying $400–$2,500/month for an SEO or "AI visibility" agency? Fire them. Your AI agent can do the work.**
+This fork builds on `leopard627/fire-your-seo-agency`.
+It keeps the original audit → implement → measure workflow and its Korea/Naver focus,
+while replacing overly rigid SEO/GEO claims with an evidence-first operating model.
 
-A wave of services now charges monthly retainers for "AI-era search optimization",
-"guaranteed ChatGPT citations", and "LLM visibility". Most of what they actually do is
-**public standards and repeatable checklists**. When a human does it, it's a retainer.
-When your agent does it, it's a skill.
+## What changed
 
-This repository is a [Claude Code](https://claude.com/claude-code) skill. Install it and
-your agent audits your site, fixes what's broken, and measures the results.
+1. Every recommendation is labeled **[OFFICIAL] / [OBSERVED] / [EXPERIMENTAL]**
+2. Search crawlers and model-development crawlers are treated separately
+3. `llms.txt` is optional/experimental, not a required Google AI-search signal
+4. "one question = one page" and fixed answer-length rules are heuristics, not requirements
+5. fixed title/meta-description character counts are treated as heuristics
+6. FAQ structured data is not treated as a direct AI-citation lever
+7. official Naver guidance is separated from AI Briefing observations
+8. 14 days is a measurement checkpoint, not a guaranteed response window
+9. technical implementation and business/search outcomes are reported separately
+10. reports include uncertainty, rollback, and follow-up measurement
 
-## Built on real numbers
+## Five lanes
 
-This is not theory. The same playbook, applied to [Chickenstock](https://www.chickstockfi.com) — a solo-built Korean stock research service:
-
-- **1.54M search impressions in 30 days** (+85,578% MoM), 7.4K clicks
-- Pages **cited paragraph-by-paragraph by Naver's AI Briefing** (Korea's answer engine)
-- Zero ad spend — all inbound from search and AI citations
-
-The journey is documented publicly on [Threads @kindainvestor](https://www.threads.com/@kindainvestor).
-
-## The five lanes
-
-"Search optimization" means different things to different engines. This skill treats them
-as five distinct lanes:
-
-| Lane | Target | The question it answers |
+| Lane | Target | Core question |
 |---|---|---|
-| **SEO** | Google & Bing crawlers | Can crawlers read and index my content at all? |
-| **AEO** (Answer Engine) | Google AI Overviews, Bing Copilot | Does the AI answer box above the results cite me? |
-| **GEO** (Generative Engine) | ChatGPT, Perplexity, Claude | When generative AI browses, am I the primary source? |
-| **LLMO** (LLM Optimization) | The model's own knowledge | Does the model know my brand — and know it correctly? |
-| **NEO** (Naver Engine) | Naver search & AI Briefing | Half of the Korean market — does Naver cite me? |
-
-**NEO is what makes this skill different.** Global AEO guides ignore Naver entirely,
-but if you serve the Korean market, half your traffic lives there.
+| SEO | traditional search | Can systems discover, crawl, index and understand the site? |
+| AEO | answer-style search | Does the page provide useful, verifiable answers? |
+| GEO | ChatGPT/Perplexity/Claude search | Can search crawlers access and discover the site as a source? |
+| LLMO | brand/entity consistency | Are public brand facts consistent and accurate? |
+| NEO | Naver Search / AI Briefing | Are official Naver basics and experimental AI-source tactics managed separately? |
 
 ## Install
 
+Current main fork:
+
 ```bash
-# As a project skill (this project only)
-git clone https://github.com/leopard627/fire-your-seo-agency.git .claude/skills/fire-your-seo-agency
-
-# Or as a personal skill (every project)
-git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.claude/skills/fire-your-seo-agency
+git clone https://github.com/Vetra-auron/fire-your-seo-agency.git .claude/skills/fire-your-seo-agency
 ```
 
-Then in Claude Code:
+Evidence-first development branch:
 
+```bash
+git clone -b evidence-first-v1.1 https://github.com/Vetra-auron/fire-your-seo-agency.git .claude/skills/fire-your-seo-agency
 ```
+
+Then:
+
+```text
 /fire-your-seo-agency audit my site
 ```
 
-## What it does
-
-1. **Audit** — reads your site the way a crawler does (no JavaScript) and scores all five lanes
-2. **Technical base** — fixes SSR exposure, sitemaps, meta, structured data
-3. **Intent landing pages** — designs pages on the "one question = one page" principle
-4. **Machine readability** — llms.txt, JSON-LD, citation-ready paragraph structure
-5. **Naver** — from Search Advisor registration to AI Briefing citation requirements
-6. **Measurement loop** — schedules a re-measurement and proves the change with numbers
-
-## What it refuses to do
-
-- ❌ Buying backlinks, engagement pods, content spam — **we don't fight the search engine**
-- ❌ "Guaranteed rankings" promises — no claims without measurement
-- ❌ Keyword stuffing, hidden text, cloaking — nothing that gets your domain killed
-
-The whole philosophy fits in one line: **AI doesn't cite good writing. AI cites accurate data.**
-Become the primary source for a number, and the citations follow.
-
 ## Structure
 
-```
-SKILL.md              ← agent operating procedure (audit → implement → measure)
+```text
+SKILL.md
 references/
-  seo.md              ← technical SEO checklist + real-world traps
-  aeo.md              ← answer engine optimization (AI Overviews · Copilot)
-  geo.md              ← generative engine optimization (ChatGPT · Perplexity) + llms.txt
-  llmo.md             ← model-knowledge optimization (brand entity)
-  neo-naver.md        ← Naver (Search Advisor · AI Briefing · blog two-track)
-  measure.md          ← the measurement loop (fixing it is not the finish line)
+  evidence-policy.md
+  crawlers.md
+  seo.md
+  aeo.md
+  geo.md
+  llmo.md
+  neo-naver.md
+  measure.md
 ```
 
-> Note: reference documents are currently written in Korean — the checklists and code
-> examples are language-agnostic, and your agent reads Korean just fine.
+## Operating principles
 
-## License
+- people-first content
+- current platform documentation before folklore
+- original data and non-commodity value
+- no ranking/traffic/citation guarantees
+- technical change ≠ proven outcome
+- explicit uncertainty and rollback
+- measurement before success claims
 
-MIT — use it freely, and keep the retainer money.
+## Evidence date
+
+Primary policy references checked: **2026-08-27**.
+
+See `references/evidence-policy.md` for source links.
+
+## Original & license
+
+Original project: https://github.com/leopard627/fire-your-seo-agency
+
+MIT License. Preserve the original copyright and license notice.

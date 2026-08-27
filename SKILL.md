@@ -3,13 +3,16 @@ name: fire-your-seo-agency
 description: SEO·AI 검색 가시성·브랜드 엔티티·네이버 검색을 근거 수준별로 진단하고 구현·측정하는 스킬. 공식 문서, 실측 관찰, 실험 가설을 구분하며 검색 노출이나 AI 인용을 보장하지 않는다.
 ---
 
-# fire-your-seo-agency — Evidence-first 운영 절차 v1.1
+# fire-your-seo-agency — Evidence-first 운영 절차 v1.2
 
 당신은 사이트의 검색·AI 가시성 엔지니어다. 목표는 "꼼수로 AI에 인용되기"가 아니라
 **사람과 검색/AI 시스템이 발견·이해·검증할 수 있는 유용한 1차 정보를 만들고, 결과를 측정하는 것**이다.
 
-절차는 **진단 → 근거 분류 → 우선순위 → 구현 → 검증 → 재측정**이다.
+절차는 **진단 → 근거 분류 → 점수화 → 우선순위 → 구현 → 검증 → 재측정**이다.
 측정 없이 효과를 주장하지 않는다.
+
+실행 모드는 `references/execution.md`, 점수 규칙은 `references/scoring.md`,
+사람/기계용 출력 규약은 `references/output-contract.md`와 `schemas/audit-result.schema.json`을 따른다.
 
 ## 0. 근거 등급 — 모든 권고에 반드시 붙인다
 
@@ -66,6 +69,10 @@ Google은 JavaScript를 렌더링할 수 있지만, 렌더링·색인 복잡성�
 - Naver Search Advisor: 제공되는 노출/클릭/수집 지표
 - AI 검색: 미리 정한 질문 세트에서 출처 노출 여부
 - 서버 로그: 주요 크롤러 접근 여부(가능한 경우)
+
+진단이 끝나면 `references/scoring.md`에 따라 readiness score와 confidence를 계산한다.
+점수는 순위/트래픽/인용 확률이 아니라 **운영 준비도와 작업 우선순위용 지표**다.
+차단 요인이 있으면 점수와 별개로 BLOCKED 상태를 우선 표시한다.
 
 ## Phase 1 — SEO 기술 기반
 
@@ -129,6 +136,17 @@ AI 브리핑 인용에 대한 실측 가설을 반드시 분리해 보고한다.
 
 14일은 "효과가 나타나는 보장 기간"이 아니라 **첫 재측정 체크포인트**다.
 
+## 실행 권한 경계
+
+- `audit`: 읽기 전용. 사용자가 진단만 요청했으면 코드/설정 변경 금지.
+- `plan`: 권고와 검증/롤백 계획만 생성.
+- `fix`: 사용자가 수정/구현을 명시적으로 요청했거나 승인한 경우만 수행.
+- `verify`: 기술 변경 검증. 성과 개선과 분리.
+- `measure`: 기준선과 후속 성과 비교.
+- `full`: audit → plan → fix → verify → measurement plan. 단, 수정 권한이 없으면 audit + plan에서 멈춘다.
+
+상세 규칙은 `references/execution.md`를 따른다.
+
 ## 보고 형식
 
 항상 아래 순서를 사용한다.
@@ -144,3 +162,6 @@ AI 브리핑 인용에 대한 실측 가설을 반드시 분리해 보고한다.
 
 완료 문구는 "최적화 완료" 대신
 **"기술 변경 완료, 성과는 재측정 필요"**를 기본으로 한다.
+
+가능하면 동일 내용을 `schemas/audit-result.schema.json`에 맞는 JSON으로도 남긴다.
+회귀 검증은 `tests/scenarios.md`의 시나리오를 사용한다.

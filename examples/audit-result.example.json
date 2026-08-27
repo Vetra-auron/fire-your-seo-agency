@@ -6,12 +6,14 @@
   "target": {
     "url": "https://example.com",
     "site_type": "SaaS",
-    "markets": ["global"]
+    "markets": [
+      "global"
+    ]
   },
   "evidence_baseline_date": "2026-08-27",
   "summary": {
     "status": "AT_RISK",
-    "readiness_score": 68,
+    "readiness_score": 66,
     "confidence": "MEDIUM",
     "blockers": []
   },
@@ -22,7 +24,9 @@
       "weight": 25,
       "score": 4,
       "confidence": "MEDIUM",
-      "reasons": ["robots and sitemap are accessible"]
+      "reasons": [
+        "robots and sitemap are accessible"
+      ]
     },
     {
       "dimension": "technical_semantics",
@@ -30,7 +34,9 @@
       "weight": 15,
       "score": 3,
       "confidence": "MEDIUM",
-      "reasons": ["canonical is present but several titles are duplicated"]
+      "reasons": [
+        "canonical is present but several titles are duplicated"
+      ]
     },
     {
       "dimension": "content_value_provenance",
@@ -38,7 +44,9 @@
       "weight": 20,
       "score": 3,
       "confidence": "LOW",
-      "reasons": ["public pages explain the product but primary-source evidence is limited"]
+      "reasons": [
+        "public pages explain the product but primary-source evidence is limited"
+      ]
     },
     {
       "dimension": "ai_search_access",
@@ -46,7 +54,9 @@
       "weight": 15,
       "score": 4,
       "confidence": "MEDIUM",
-      "reasons": ["OAI-SearchBot is allowed; training policy is handled separately"]
+      "reasons": [
+        "OAI-SearchBot is allowed; training policy is handled separately"
+      ]
     },
     {
       "dimension": "measurement_observability",
@@ -54,7 +64,9 @@
       "weight": 15,
       "score": 2,
       "confidence": "LOW",
-      "reasons": ["no Search Console or fixed AI-question baseline was provided"]
+      "reasons": [
+        "no Search Console or fixed AI-question baseline was provided"
+      ]
     },
     {
       "dimension": "naver_readiness",
@@ -62,7 +74,9 @@
       "weight": 10,
       "score": null,
       "confidence": "LOW",
-      "reasons": ["Naver is not a target market for this example"]
+      "reasons": [
+        "Naver is not a target market for this example"
+      ]
     }
   ],
   "findings": [
@@ -78,7 +92,9 @@
       "verification": "Confirm baseline files contain a date range, data freshness date and fixed query set.",
       "rollback": "Remove generated baseline artifacts if the project does not want to persist them.",
       "source_urls": [],
-      "affected_urls": ["https://example.com"],
+      "affected_urls": [
+        "https://example.com"
+      ],
       "impact": "HIGH",
       "effort": "S"
     }
@@ -93,8 +109,18 @@
     }
   ],
   "measurement_plan": {
-    "checkpoints": ["immediate technical check", "~14 day directional check", "~28 day comparison"],
-    "metrics": ["impressions", "clicks", "CTR", "conversions", "AI source presence"]
+    "checkpoints": [
+      "immediate technical check",
+      "~14 day directional check",
+      "~28 day comparison"
+    ],
+    "metrics": [
+      "impressions",
+      "clicks",
+      "CTR",
+      "conversions",
+      "AI source presence"
+    ]
   },
   "uncertainties": [
     "Search Console and server logs were not available."

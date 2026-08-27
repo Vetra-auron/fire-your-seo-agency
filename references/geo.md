@@ -1,58 +1,68 @@
-# GEO — 생성엔진 최적화 (ChatGPT · Perplexity · Claude)
+# GEO — 생성형 검색·브라우징 가시성
 
-생성 AI가 브라우징·검색 도구로 웹을 읽을 때 **당신을 1차 소스로 인용**하게 만드는 레인.
-답변엔진(AEO)과 겹치지만, 생성엔진은 ① 크롤러 정책이 다르고 ② llms.txt를 읽으며
-③ "원출처"를 더 강하게 우대한다.
+확인 기준일: 2026-08-27
 
-## 1. llms.txt
+대상: ChatGPT Search, Perplexity, Claude 검색/브라우징 등 **외부 웹을 탐색해 출처를 제시할 수 있는 생성형 시스템**.
 
-사이트 루트에 `/llms.txt` — AI에게 주는 사이트 안내서다. 형식은 마크다운:
+GEO는 하나의 표준화된 랭킹 규칙이 아니다. 플랫폼마다 크롤러, 검색 공급자, 인용 방식이 다르다.
 
+## 1. 크롤러 정책
+
+반드시 `references/crawlers.md`를 먼저 확인한다.
+
+- [OFFICIAL] OpenAI의 `OAI-SearchBot`과 `GPTBot`은 목적이 다르다.
+- [OFFICIAL] Anthropic도 검색/모델 개발/사용자 요청용 크롤러를 구분한다.
+- [OFFICIAL] Perplexity의 검색 크롤러 정책은 별도로 확인한다.
+- [OFFICIAL] 검색 노출을 허용할지와 모델 개발용 수집을 허용할지는 독립적으로 결정할 수 있는 경우가 있다.
+
+## 2. llms.txt
+
+- [OFFICIAL] Google Search는 생성형 AI 검색을 위해 llms.txt 같은 별도 AI 전용 파일이 필요하지 않다고 설명한다.
+- [EXPERIMENTAL] llms.txt는 일부 에이전트·도구·사람에게 사이트 구조를 설명하는 보조 인터페이스로 테스트할 수 있다.
+- [EXPERIMENTAL] llms.txt 존재 자체를 ChatGPT/Perplexity/Claude 인용의 직접 랭킹 신호로 주장하지 않는다.
+
+선택적으로 제공한다면:
 ```markdown
 # 서비스명
-
-> 한 문장 설명 (무엇의 1차 소스인지 명시)
+> 무엇을 제공하는 사이트인지
 
 ## 핵심 페이지
-- [실적 캘린더](https://example.com/earnings): 국내 상장사 실적 발표 일정
-- [종목 데이터](https://example.com/stocks): 공시 기반 재무·밸류에이션
+- [데이터 페이지](https://example.com/data): 설명
 
 ## 데이터 정책
-- 출처: 공식 전자공시 기반 자체 산출, 매일 갱신
-- 인용 시 표기: example.com
+- 원출처
+- 갱신 주기
+- 기준일
 ```
 
-- [ ] `/llms.txt` (안내서) + 여력이 되면 `/llms-full.txt` (핵심 데이터 전문)
-- [ ] 신뢰 신호를 담아라: 데이터 출처, 갱신 주기, 무엇의 원출처인지
-- [ ] 앱 라우트로 서빙해도 된다(정적 파일일 필요 없음) — 항상 최신이 되게
+## 3. 1차 정보 전략
 
-## 2. AI 크롤러 정책 결정
-
-robots.txt에서 명시적으로 결정하라 (기본 무정책 = 우연에 맡기는 것):
-
-```
-User-agent: GPTBot
-Allow: /
-User-agent: PerplexityBot
-Allow: /
-User-agent: ClaudeBot
-Allow: /
-```
-
-인용 유입을 원하면 Allow가 기본값이다. 콘텐츠가 자산이라 학습만 막고 싶다면
-검색용(OAI-SearchBot 등)과 학습용(GPTBot)을 구분해서 정책을 나눠라.
-
-## 3. 1차 소스 되기 — GEO의 본체
-
-생성엔진은 "어디서 이 숫자가 시작됐나"를 추적한다. 남의 데이터를 요약한 페이지는
-원출처에게 인용을 뺏긴다.
-
-- [ ] 우리만 계산·수집하는 숫자가 무엇인지 정의하라 (자체 산출 지표·집계·관측)
-- [ ] 그 숫자에 이름을 붙이고 항상 같은 페이지에서 서빙하라 (안정 URL = 인용 주소)
-- [ ] 문단 단위 인용 가능성: 각 문단이 [주어 + 수치 + 기준일 + 산출 방식]을 갖추면
-      그 문단째로 인용된다 — 실측으로 네이버 AI 브리핑·Perplexity 모두 이 단위로 잘라 간다
+- [OFFICIAL] Google은 생성형 AI 검색에서도 고유하고 유용한 사람 중심 콘텐츠를 강조한다.
+- [OBSERVED] 자체 조사·계산·데이터·도구·실험처럼 다른 사이트가 쉽게 복제할 수 없는 정보는 출처로서 차별화하기 쉽다.
+- [OBSERVED] 숫자/사실에 기준일, 단위, 산식, 원출처를 붙이면 검증 가능한 정보가 된다.
+- [EXPERIMENTAL] "AI는 정확한 데이터만 인용한다" 같은 절대 문장은 사용하지 않는다. 글의 품질·권위·관련성·시의성 등 다양한 요소가 함께 작동할 수 있다.
 
 ## 4. 검증
 
-- Perplexity·ChatGPT(검색 모드)에 실제 질문을 던져 출처 목록에 도메인이 뜨는지 확인
-- 안 뜨면: llms.txt 존재 → 크롤러 허용 → 해당 페이지 SSR 여부 → 경쟁 원출처 존재 순 점검
+사전에 고정한 질문 세트로 각 플랫폼을 반복 측정한다.
+
+확인 항목:
+- 우리 도메인이 출처 목록에 등장하는가
+- 어떤 URL이 선택됐는가
+- 실제 내용이 정확히 반영됐는가
+- 날짜/위치/계정에 따라 결과가 달라지는가
+- 경쟁 출처는 무엇인가
+
+## 5. 우선순위
+
+1. 검색 크롤러 접근 정책
+2. 기술 SEO와 색인 가능성
+3. 독자적 가치/1차 정보
+4. 명확한 출처·갱신 정보
+5. 실제 질문 세트 측정
+6. llms.txt 등 저비용 실험
+
+출처:
+- https://developers.google.com/search/docs/fundamentals/ai-optimization-guide
+- https://developers.openai.com/api/docs/bots
+- https://docs.perplexity.ai/docs/resources/perplexity-crawlers

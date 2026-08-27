@@ -4,7 +4,7 @@
 
 ![fire-your-seo-agency](./assets/social-preview.png)
 
-> **Paying $500–$1,500/month for an SEO or "AI visibility" agency? Fire them. Your AI agent can do the work.**
+> **Paying $400–$2,500/month for an SEO or "AI visibility" agency? Fire them. Your AI agent can do the work.**
 
 A wave of services now charges monthly retainers for "AI-era search optimization",
 "guaranteed ChatGPT citations", and "LLM visibility". Most of what they actually do is

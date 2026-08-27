@@ -1,10 +1,10 @@
-# 🔥 fire-your-seo-agency — Evidence-first fork
+# 🔥 fire-your-seo-agency — Evidence-first v1.2
 
 [한국어](./README.ko.md) · **English**
 
 > A Claude Code skill for SEO and AI-search visibility that separates **official guidance, observed behavior, and experimental hypotheses**.
 
-This fork builds on `leopard627/fire-your-seo-agency`.
+This fork builds on `leopard627/fire-your-seo-agency`. v1.2 adds an operational contract for a repeatable Search Visibility Agent.
 It keeps the original audit → implement → measure workflow and its Korea/Naver focus,
 while replacing overly rigid SEO/GEO claims with an evidence-first operating model.
 
@@ -51,6 +51,15 @@ Then:
 /fire-your-seo-agency audit my site
 ```
 
+## v1.2 operational layer
+
+- audit / plan / fix / verify / measure / full modes
+- 0–100 readiness score + confidence + BLOCKED/AT_RISK/READY/UNKNOWN state
+- P0–P3 prioritization
+- JSON Schema for machine-readable results
+- persistent baseline/follow-up measurement convention
+- 12 behavioral regression scenarios
+
 ## Structure
 
 ```text
@@ -64,6 +73,15 @@ references/
   llmo.md
   neo-naver.md
   measure.md
+  scoring.md
+  execution.md
+  output-contract.md
+schemas/
+  audit-result.schema.json
+examples/
+  audit-result.example.json
+tests/
+  scenarios.md
 ```
 
 ## Operating principles

@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Vetra-auron/fire-your-seo-agency/schemas/audit-result.schema.json",
+  "title": "Search Visibility Agent Audit Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "run_type",
+    "generated_at",
+    "target",
+    "evidence_baseline_date",
+    "summary",
+    "scores",
+    "findings",
+    "baseline",
+    "changes",
+    "verification",
+    "measurement_plan",
+    "uncertainties",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.2" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "run_type": {
+      "type": "string",
+      "enum": ["audit", "plan", "fix", "verify", "measure", "full"]
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "site_type", "markets"],
+      "properties": {
+        "url": { "type": "string" },
+        "site_type": { "type": "string" },
+        "markets": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "evidence_baseline_date": { "type": "string", "format": "date" },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "readiness_score", "confidence", "blockers"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["BLOCKED", "AT_RISK", "READY", "UNKNOWN"]
+        },
+        "readiness_score": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["HIGH", "MEDIUM", "LOW"]
+        },
+        "blockers": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimension", "applicable", "weight", "score", "confidence", "reasons"],
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "enum": [
+              "discoverability_indexability",
+              "technical_semantics",
+              "content_value_provenance",
+              "ai_search_access",
+              "measurement_observability",
+              "naver_readiness"
+            ]
+          },
+          "applicable": { "type": "boolean" },
+          "weight": { "type": "number", "minimum": 0, "maximum": 100 },
+          "score": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "maximum": 5
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["HIGH", "MEDIUM", "LOW"]
+          },
+          "reasons": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "baseline": { "type": "object" },
+    "changes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/change" }
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "status"],
+        "properties": {
+          "check": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["PASS", "FAIL", "UNKNOWN", "NOT_APPLICABLE"]
+          },
+          "details": { "type": "string" }
+        }
+      }
+    },
+    "measurement_plan": {
+      "type": "object",
+      "required": ["checkpoints", "metrics"],
+      "properties": {
+        "checkpoints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "metrics": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "type"],
+        "properties": {
+          "url": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["OFFICIAL", "TARGET_SITE", "OBSERVATION", "OTHER"]
+          },
+          "checked_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "lane",
+        "priority",
+        "severity",
+        "evidence_level",
+        "title",
+        "observation",
+        "recommendation",
+        "verification",
+        "rollback",
+        "source_urls"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "lane": {
+          "type": "string",
+          "enum": ["seo", "aeo", "geo", "llmo", "neo", "measurement", "cross"]
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["P0", "P1", "P2", "P3"]
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["blocker", "high", "medium", "low", "info"]
+        },
+        "evidence_level": {
+          "type": "string",
+          "enum": ["OFFICIAL", "OBSERVED", "EXPERIMENTAL"]
+        },
+        "title": { "type": "string" },
+        "observation": { "type": "string" },
+        "recommendation": { "type": "string" },
+        "verification": { "type": "string" },
+        "rollback": { "type": "string" },
+        "source_urls": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "affected_urls": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "impact": { "type": "string", "enum": ["HIGH", "MEDIUM", "LOW"] },
+        "effort": { "type": "string", "enum": ["S", "M", "L", "UNKNOWN"] }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "before",
+        "after",
+        "reason",
+        "evidence_level",
+        "verification_status",
+        "rollback"
+      ],
+      "properties": {
+        "target": { "type": "string" },
+        "before": { "type": ["string", "null"] },
+        "after": { "type": ["string", "null"] },
+        "reason": { "type": "string" },
+        "evidence_level": {
+          "type": "string",
+          "enum": ["OFFICIAL", "OBSERVED", "EXPERIMENTAL"]
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": ["PASS", "FAIL", "PENDING", "UNKNOWN"]
+        },
+        "rollback": { "type": "string" }
+      }
+    }
+  }
+}

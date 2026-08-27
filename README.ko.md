@@ -2,6 +2,8 @@
 
 **한국어** · [English](./README.md)
 
+![fire-your-seo-agency](./assets/social-preview.png)
+
 > **월 30~150만 원짜리 SEO·AEO 대행, 해고하세요. 당신의 AI 에이전트가 직접 합니다.**
 
 "AI 시대 검색 최적화", "챗GPT 인용 보장", "네이버 상위 노출" — 이런 문구로 월 구독료를 받는

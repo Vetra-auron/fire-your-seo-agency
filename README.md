@@ -2,6 +2,8 @@
 
 [한국어](./README.ko.md) · **English**
 
+![fire-your-seo-agency](./assets/social-preview.png)
+
 > **Paying $500–$1,500/month for an SEO or "AI visibility" agency? Fire them. Your AI agent can do the work.**
 
 A wave of services now charges monthly retainers for "AI-era search optimization",

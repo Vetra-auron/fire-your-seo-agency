@@ -1,10 +1,10 @@
-# 🔥 fire-your-seo-agency — Evidence-first fork
+# 🔥 fire-your-seo-agency — Evidence-first v1.2
 
 **한국어** · [English](./README.md)
 
 > SEO·AEO·GEO·LLMO·NEO를 한 번에 점검하되, **공식 사실·실측 관찰·실험 가설을 구분**하는 Claude Code 스킬입니다.
 
-이 저장소는 `leopard627/fire-your-seo-agency`를 기반으로 한 fork입니다.
+이 저장소는 `leopard627/fire-your-seo-agency`를 기반으로 한 fork이며, 현재 v1.2는 **반복 실행 가능한 Search Visibility Agent 운영 규약**까지 포함합니다.
 원본의 **진단 → 구현 → 측정** 구조와 한국 시장용 Naver 레인을 유지하면서,
 과도하게 단정적인 SEO/GEO 규칙을 최신 공식 문서 기준으로 보정했습니다.
 
@@ -51,6 +51,15 @@ Claude Code에서:
 /fire-your-seo-agency 내 사이트 진단해줘
 ```
 
+## v1.2 운영 계층
+
+- `audit / plan / fix / verify / measure / full` 실행 모드
+- 0~100 readiness score + confidence + BLOCKED/AT_RISK/READY/UNKNOWN 상태
+- P0~P3 우선순위
+- JSON Schema 기반 기계 가독 결과
+- 기준선/후속 측정 저장 규약
+- 회귀 테스트 12개
+
 ## 구조
 
 ```text
@@ -64,6 +73,15 @@ references/
   llmo.md
   neo-naver.md
   measure.md
+  scoring.md
+  execution.md
+  output-contract.md
+schemas/
+  audit-result.schema.json
+examples/
+  audit-result.example.json
+tests/
+  scenarios.md
 ```
 
 ## 운영 철학

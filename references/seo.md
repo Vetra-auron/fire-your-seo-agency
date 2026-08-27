@@ -1,59 +1,85 @@
 # SEO — 기술 기반 체크리스트
 
-크롤러가 읽지 못하는 콘텐츠는 존재하지 않는 콘텐츠다. 이 레인의 목표는 하나:
-**자바스크립트 없이 받은 HTML에 콘텐츠·메타·구조화 데이터가 전부 있게** 만드는 것.
+확인 기준일: 2026-08-27
 
-## 1. 콘텐츠 노출
+목표는 검색엔진이 사이트를 **발견·크롤링·렌더링·색인·이해**할 수 있게 만드는 것이다.
+특정 기술(SSR, JSON-LD 등)을 목적 그 자체로 취급하지 않는다.
 
-- [ ] 핵심 페이지가 **비로그인으로 열리는가?** 로그인 월 뒤의 콘텐츠는 색인되지 않는다.
-      전부 열기 어려우면 티저(첫 문단·핵심 수치)라도 SSR로 열고 나머지를 게이트한다.
-- [ ] `curl -sL <url>`로 받은 HTML에 본문이 있는가? SPA/CSR이면 SSR·SSG·프리렌더 도입이
-      1순위다 — 이거 없이는 아래 전부가 무의미하다.
-- [ ] ⚠️ **CSR 바일아웃 함정**: SSR 프레임워크에서도 특정 훅·API 사용이 페이지를 통째로
-      클라이언트 렌더로 떨어뜨릴 수 있다 (Next.js의 Suspense 없는 useSearchParams 등).
-      배포마다 대표 페이지를 curl로 재확인하라 — 본문 글자 수가 갑자기 줄면 사고다.
+## 1. 크롤링·색인 가능성
 
-## 2. 사이트맵
+- [OFFICIAL] 핵심 공개 페이지가 로그인·권한 장벽 없이 접근 가능한지 확인한다.
+- [OFFICIAL] robots.txt, meta robots, HTTP 상태 코드가 의도와 일치하는지 확인한다.
+- [OFFICIAL] 사이트맵에는 색인시키고 싶은 canonical URL을 넣고 실제 상태와 동기화한다.
+- [OFFICIAL] Google은 JavaScript를 렌더링할 수 있으므로 "curl에 본문이 없으면 색인 불가"라고 단정하지 않는다.
+- [OBSERVED] JS 의존성이 높을수록 렌더링 지연·오류·디버깅 복잡성이 커질 수 있으므로 핵심 콘텐츠의 서버/정적 렌더링을 우선 검토한다.
 
-- [ ] sitemap.xml 존재 + robots.txt에서 참조
-- [ ] 상세 페이지(제품·글·항목)가 **전부** 들어 있는가 — 목록 페이지만 넣는 실수가 흔하다
-- [ ] 5만 URL·50MB 초과가 보이면 **미리 샤딩**하라 (sitemap index + 파트 분할).
-      한도 초과 순간 전체가 조용히 무시된다.
-- [ ] 새 콘텐츠 유형을 만들면 사이트맵에 넣는 것까지가 출시다 — 빼먹은 유형은 몇 달씩
-      색인 밖에 있게 된다 (실측: 필터 페이지 3종 몇 주간 누락)
+검증 예:
+```bash
+curl -sIL https://example.com
+curl -sL https://example.com/robots.txt
+curl -sL https://example.com/sitemap.xml | head
+```
 
-## 3. 메타
+## 2. URL·상태 코드·중복
 
-- [ ] 제목 50~60자: 핵심 키워드 앞쪽, 브랜드 뒤쪽
-- [ ] 설명 150~160자: 클릭할 이유가 있는 문장 (면책·경고 문구를 설명에 넣지 마라 — CTR만 죽인다)
-- [ ] 페이지마다 고유해야 한다 — 템플릿 돌려쓰기로 수백 페이지가 같은 설명이면 중복 판정
-- [ ] OG 이미지: 공유 시 보이는 얼굴. 페이지 유형별 동적 생성이 이상적
+- [OFFICIAL] 없는 페이지는 적절한 404/410을 반환한다.
+- [OFFICIAL] 중복/유사 URL에는 canonical을 일관되게 사용한다.
+- [OFFICIAL] 영구 이동은 적절한 301/308을 사용하고 불필요한 리다이렉트 체인을 줄인다.
+- [OFFICIAL] 다국어 페이지는 실제 대체 관계에 맞게 hreflang을 구성한다.
+- [OBSERVED] CDN/ISR에서 일시 오류가 404로 캐시되면 장시간 잘못된 응답이 남을 수 있으므로 "없음"과 "일시 실패"를 구분한다.
 
-## 4. 구조화 데이터 (JSON-LD)
+## 3. 내부 링크·사이트 구조
 
-- [ ] 페이지 유형에 맞는 스키마: Article, Product, FAQPage, BreadcrumbList, Organization
-- [ ] **가시 텍스트와 100% 동일해야 한다** — 화면에 없는 내용을 LD에 넣으면 스팸 판정 위험
-- [ ] `@id` 규약: 같은 엔티티는 사이트 전체에서 같은 @id로. 페이지마다 Organization을
-      새로 선언하면 엔티티가 분열된다 — 전역 1회 선언 + 참조
-- [ ] 검증: Google Rich Results Test 또는 schema.org validator로 배포 후 확인
+- [OFFICIAL] 중요한 페이지가 정상적인 `<a href>` 링크를 통해 발견 가능하게 한다.
+- [OFFICIAL] 핵심 페이지가 지나치게 깊게 묻히지 않도록 정보 구조를 설계한다.
+- [OBSERVED] 목록/필터만 있고 상세 페이지로의 안정적 내부 링크가 없으면 발견성이 약해지기 쉽다.
 
-## 5. URL·응답 위생
+## 4. 제목·메타 설명
 
-- [ ] canonical: 파라미터 변형·중복 경로가 하나의 정본을 가리키게
-- [ ] 다국어면 hreflang 상호 참조 (한쪽만 걸면 무효)
-- [ ] 없는 페이지는 200이 아니라 404를 — soft 404는 색인 예산을 태운다
-- [ ] ⚠️ **404 베이크 함정**: ISR·CDN 캐시 계층에서 일시 장애의 404가 몇 시간씩 구워질 수 있다.
-      데이터 조회 실패 시 404를 반환하지 말고 throw(재시도)하라 — "없음"과 "못 가져옴"은 다르다
-- [ ] 리다이렉트 체인 1홉 이내
+- [OFFICIAL] 페이지마다 내용에 맞는 고유하고 설명적인 title을 사용한다.
+- [OFFICIAL] meta description은 검색 결과 스니펫 후보로 사용될 수 있지만 Google이 다른 본문을 선택할 수 있다.
+- [OFFICIAL] Google은 meta description에 고정 문자 수 제한을 두지 않는다.
+- [EXPERIMENTAL] 50~60자 title, 150~160자 description 같은 숫자는 미리보기 품질을 위한 휴리스틱으로만 사용한다.
 
-## 6. 성능·자산
+숫자 규칙보다 **검색 의도·명확성·중복 방지**를 우선한다.
 
-- [ ] 이미지 WebP/AVIF + 명시적 width/height (CLS)
-- [ ] LCP 대상(히어로 이미지·폰트) preload
-- [ ] 로고·아이콘은 무손실 최적화 — 수백 KB 로고가 전 페이지에 실리는 낭비가 흔하다
+## 5. 구조화 데이터
 
-## 7. 색인 가속
+- [OFFICIAL] 실제 페이지 유형과 Google이 지원하는 기능에 맞는 schema만 사용한다.
+- [OFFICIAL] 구조화 데이터가 가시 콘텐츠를 오해하게 만들거나 존재하지 않는 내용을 표현하지 않게 한다.
+- [OFFICIAL] Rich Results Test와 schema.org validator로 문법/지원 여부를 확인한다.
+- [OFFICIAL] 구조화 데이터는 노출 자격을 도울 수 있지만 rich result나 순위를 보장하지 않는다.
 
-- [ ] IndexNow: 새 페이지·갱신 페이지를 발행 즉시 핑 (Bing·Naver·Yandex 계열이 소비)
-- [ ] Google은 IndexNow 미지원 — 사이트맵 lastmod 정확성으로 승부
-- [ ] 대량 발행 시 핑도 발행 파이프라인에 내장하라 — 손으로 하는 핑은 반드시 끊긴다
+## 6. 사이트맵
+
+- [OFFICIAL] sitemap.xml 또는 sitemap index를 사용하고 robots.txt에서 위치를 알릴 수 있다.
+- [OFFICIAL] sitemap 한 파일의 공식 한도(50,000 URL / 압축 전 50MB)를 넘으면 분할한다.
+- [OBSERVED] 신규 콘텐츠 유형이 사이트맵 생성 로직에서 빠지는 운영 사고가 흔하므로 배포 체크에 포함한다.
+
+## 7. 성능·모바일·사용성
+
+- [OFFICIAL] 모바일 환경에서 주요 콘텐츠와 기능이 정상 동작하게 한다.
+- [OFFICIAL] Core Web Vitals와 실제 사용자 경험을 함께 본다.
+- [OBSERVED] 이미지 크기, 폰트, 과도한 클라이언트 JS가 LCP/INP/CLS 악화의 주요 원인이 되는 경우가 많다.
+
+## 8. IndexNow
+
+- [OFFICIAL] IndexNow 지원 엔진에는 URL 변경 알림을 자동화할 수 있다.
+- [OFFICIAL] Google은 IndexNow를 사용하지 않는다.
+- [OFFICIAL] Naver의 지원 여부와 구체적 동작은 IndexNow 공식 참여 목록을 최신 확인한다.
+
+## 우선순위
+
+1. 막힌 크롤링/색인
+2. 잘못된 상태 코드·canonical
+3. 내부 링크·사이트맵 누락
+4. 제목/스니펫 품질
+5. 지원되는 구조화 데이터
+6. 성능·UX
+7. 실험적 최적화
+
+출처:
+- https://developers.google.com/search/docs
+- https://developers.google.com/search/docs/appearance/snippet
+- https://developers.google.com/search/docs/appearance/structured-data/sd-policies
+- https://www.indexnow.org/

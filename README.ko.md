@@ -1,90 +1,107 @@
-# 🔥 fire-your-seo-agency
+# 🔥 fire-your-seo-agency — Evidence-first v1.2
 
 **한국어** · [English](./README.md)
 
-![fire-your-seo-agency](./assets/social-preview.png)
+> SEO·AEO·GEO·LLMO·NEO를 한 번에 점검하되, **공식 사실·실측 관찰·실험 가설을 구분**하는 Claude Code 스킬입니다.
 
-> **월 50~350만 원짜리 SEO·AEO 대행, 해고하세요. 당신의 AI 에이전트가 직접 합니다.**
+이 저장소는 `leopard627/fire-your-seo-agency`를 기반으로 한 fork이며, 현재 v1.2는 **반복 실행 가능한 Search Visibility Agent 운영 규약**까지 포함합니다.
+원본의 **진단 → 구현 → 측정** 구조와 한국 시장용 Naver 레인을 유지하면서,
+과도하게 단정적인 SEO/GEO 규칙을 최신 공식 문서 기준으로 보정했습니다.
 
-"AI 시대 검색 최적화", "챗GPT 인용 보장", "네이버 상위 노출" — 이런 문구로 월 구독료를 받는
-대행 서비스가 쏟아지고 있습니다. 그런데 그들이 하는 일의 대부분은 **공개된 표준 문서와
-반복 가능한 체크리스트**입니다. 사람이 하면 용역이지만, AI 에이전트가 하면 스킬입니다.
+## 이 fork에서 바뀐 핵심
 
-이 저장소는 [Claude Code](https://claude.com/claude-code) 스킬입니다. 설치하면 당신의 에이전트가
-사이트를 진단하고, 고칠 것을 직접 고치고, 결과를 측정합니다.
-
-## 만든 사람의 실측
-
-이 스킬은 이론이 아닙니다. 1인 개발 증권 서비스 [치킨스탁](https://www.chickstockfi.com)에 같은 플레이북을 적용해서:
-
-- 30일 검색 노출 **153.9만 회** (전월 대비 +85,578%), 클릭 7.4천
-- **네이버 AI 브리핑이 문단마다 인용하는 페이지** 확보 (교과서적 인용 카드 노출)
-- 마케팅비 0원 — 전부 검색·AI 인용 유입
-
-과정은 [Threads @kindainvestor](https://www.threads.com/@kindainvestor)에서 공개적으로 기록하고 있습니다.
+1. 모든 권고를 **[OFFICIAL] / [OBSERVED] / [EXPERIMENTAL]**로 분리
+2. `OAI-SearchBot`과 `GPTBot` 등 **검색용/모델 개발용 크롤러 구분**
+3. `llms.txt`를 필수 SEO/GEO 신호가 아닌 **선택적 실험 요소**로 재분류
+4. "질문 하나 = 페이지 하나", "첫 답변 40자" 같은 규칙을 절대 요건에서 휴리스틱으로 변경
+5. meta title/description 글자 수를 고정 규칙이 아닌 가이드로 변경
+6. FAQ JSON-LD와 AI 인용의 인과관계 주장 제거
+7. Naver 공식 가이드와 AI 브리핑 실측 가설 분리
+8. 14일을 성과 보장 기간이 아닌 **첫 재측정 체크포인트**로 변경
+9. 기술 변경과 실제 성과를 별도 판정
+10. 모든 작업에 **롤백·모르는 것·후속 측정** 포함
 
 ## 다섯 레인
 
-같은 "검색 최적화"라도 상대하는 엔진이 다릅니다. 이 스킬은 다섯 레인을 구분해서 각각 최적화합니다.
-
-| 레인 | 상대 | 핵심 질문 |
+| 레인 | 대상 | 핵심 질문 |
 |---|---|---|
-| **SEO** | 구글·빙 크롤러 | 크롤러가 내 콘텐츠를 읽고 색인할 수 있는가? |
-| **AEO** (Answer Engine) | 구글 AI Overviews, 빙 Copilot | 검색 결과 위 AI 답변이 나를 인용하는가? |
-| **GEO** (Generative Engine) | ChatGPT, Perplexity, Claude | 생성 AI가 브라우징할 때 나를 1차 소스로 쓰는가? |
-| **LLMO** (LLM Optimization) | 모델 자체의 지식 | 모델이 내 브랜드를 알고, 정확히 아는가? |
-| **NEO** (Naver Engine) | 네이버 검색·AI 브리핑 | 한국 시장의 절반, 네이버가 나를 인용하는가? |
-
-**NEO는 이 스킬의 차별점입니다.** 글로벌 AEO 가이드는 네이버를 다루지 않지만,
-한국 서비스라면 트래픽의 절반이 네이버에서 옵니다.
+| SEO | Google/Bing/Naver의 기본 검색 | 발견·크롤링·색인·이해가 가능한가? |
+| AEO | AI Overviews 등 답변형 검색 | 유용하고 검증 가능한 답을 제공하는가? |
+| GEO | ChatGPT/Perplexity/Claude 검색 | 검색 크롤러가 접근하고 출처로 발견할 수 있는가? |
+| LLMO | 브랜드/엔티티 일관성 | 공개 웹의 브랜드 사실이 일관되고 정확한가? |
+| NEO | Naver 검색·AI 브리핑 | Naver 공식 기반과 AI 출처 실험을 분리해 관리하는가? |
 
 ## 설치
 
+이 fork를 직접 사용할 경우:
+
 ```bash
-# 프로젝트 스킬로 (해당 프로젝트에서만)
-git clone https://github.com/leopard627/fire-your-seo-agency.git .claude/skills/fire-your-seo-agency
-
-# 또는 개인 스킬로 (모든 프로젝트에서)
-git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.claude/skills/fire-your-seo-agency
+git clone https://github.com/Vetra-auron/fire-your-seo-agency.git .claude/skills/fire-your-seo-agency
 ```
 
-그리고 Claude Code에서:
+개발 중인 Evidence-first 브랜치를 시험하려면:
 
+```bash
+git clone -b evidence-first-v1.1 https://github.com/Vetra-auron/fire-your-seo-agency.git .claude/skills/fire-your-seo-agency
 ```
+
+Claude Code에서:
+
+```text
 /fire-your-seo-agency 내 사이트 진단해줘
 ```
 
-## 무엇을 하나
+## v1.2 운영 계층
 
-1. **진단** — 사이트를 크롤러의 눈으로 읽고(자바스크립트 없이), 다섯 레인 각각의 현재 상태를 측정합니다
-2. **기술 기반** — SSR 노출, 사이트맵, 메타, 구조화 데이터를 고칩니다
-3. **의도 랜딩** — "질문 하나 = 페이지 하나" 원칙으로 검색 의도별 페이지를 설계합니다
-4. **기계 가독** — llms.txt, JSON-LD, 인용 가능한 문단 구조를 만듭니다
-5. **네이버** — 서치어드바이저 등록부터 AI 브리핑 인용 요건까지
-6. **측정 루프** — 고치고 끝이 아니라, 재측정 일정을 잡고 숫자로 확인합니다
-
-## 하지 않는 것
-
-- ❌ 백링크 구매, 품앗이 자동화, 콘텐츠 스팸 — **검색엔진과 싸우지 않습니다**
-- ❌ "상위 노출 보장" 같은 약속 — 측정 없이는 주장하지 않습니다
-- ❌ 키워드 스터핑, 숨긴 텍스트, 클로킹 — 걸리면 계정이 죽는 일은 하지 않습니다
-
-이 스킬의 철학은 하나입니다: **AI가 인용하는 것은 잘 쓴 글이 아니라 정확한 데이터입니다.**
-당신이 어떤 숫자의 1차 소스가 되면, 인용은 따라옵니다.
+- `audit / plan / fix / verify / measure / full` 실행 모드
+- 0~100 readiness score + confidence + BLOCKED/AT_RISK/READY/UNKNOWN 상태
+- P0~P3 우선순위
+- JSON Schema 기반 기계 가독 결과
+- 기준선/후속 측정 저장 규약
+- 회귀 테스트 12개
 
 ## 구조
 
-```
-SKILL.md              ← 에이전트 운영 절차 (진단 → 구현 → 측정)
+```text
+SKILL.md
 references/
-  seo.md              ← 기술 SEO 체크리스트 + 실전 함정
-  aeo.md              ← 답변엔진 최적화 (AI Overviews·Copilot)
-  geo.md              ← 생성엔진 최적화 (ChatGPT·Perplexity) + llms.txt
-  llmo.md             ← 모델 인지 최적화 (브랜드 엔티티)
-  neo-naver.md        ← 네이버 (서치어드바이저·AI 브리핑·블로그 투트랙)
-  measure.md          ← 측정 루프 (고치고 끝이 아니다)
+  evidence-policy.md   ← 근거 등급과 출처 정책
+  crawlers.md          ← OpenAI·Anthropic·Perplexity·Naver 크롤러 구분
+  seo.md
+  aeo.md
+  geo.md
+  llmo.md
+  neo-naver.md
+  measure.md
+  scoring.md
+  execution.md
+  output-contract.md
+schemas/
+  audit-result.schema.json
+examples/
+  audit-result.example.json
+tests/
+  scenarios.md
 ```
 
-## 라이선스
+## 운영 철학
 
-MIT — 마음껏 쓰고, 대행비는 아끼세요.
+- 사람에게 유용한 콘텐츠가 우선
+- 플랫폼별 공식 문서를 우선
+- 1차 데이터와 독자적 가치를 선호
+- 랭킹/트래픽/AI 인용을 보장하지 않음
+- 기술 변경과 성과 개선을 분리
+- 모르는 것은 모른다고 기록
+- 측정 없는 성공 주장을 하지 않음
+
+## 근거 기준일
+
+주요 공식 정책 확인 기준일: **2026-08-27**
+
+세부 출처는 `references/evidence-policy.md`와 각 레인 문서를 참조하세요.
+
+## 원본 및 라이선스
+
+Original: https://github.com/leopard627/fire-your-seo-agency
+
+MIT License. 원저작자 고지와 라이선스 조건을 유지합니다.

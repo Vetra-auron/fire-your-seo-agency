@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.2",
+  "run_id": "20260827-example-audit",
+  "run_type": "audit",
+  "generated_at": "2026-08-27T12:00:00+09:00",
+  "target": {
+    "url": "https://example.com",
+    "site_type": "SaaS",
+    "markets": [
+      "global"
+    ]
+  },
+  "evidence_baseline_date": "2026-08-27",
+  "summary": {
+    "status": "AT_RISK",
+    "readiness_score": 66,
+    "confidence": "MEDIUM",
+    "blockers": []
+  },
+  "scores": [
+    {
+      "dimension": "discoverability_indexability",
+      "applicable": true,
+      "weight": 25,
+      "score": 4,
+      "confidence": "MEDIUM",
+      "reasons": [
+        "robots and sitemap are accessible"
+      ]
+    },
+    {
+      "dimension": "technical_semantics",
+      "applicable": true,
+      "weight": 15,
+      "score": 3,
+      "confidence": "MEDIUM",
+      "reasons": [
+        "canonical is present but several titles are duplicated"
+      ]
+    },
+    {
+      "dimension": "content_value_provenance",
+      "applicable": true,
+      "weight": 20,
+      "score": 3,
+      "confidence": "LOW",
+      "reasons": [
+        "public pages explain the product but primary-source evidence is limited"
+      ]
+    },
+    {
+      "dimension": "ai_search_access",
+      "applicable": true,
+      "weight": 15,
+      "score": 4,
+      "confidence": "MEDIUM",
+      "reasons": [
+        "OAI-SearchBot is allowed; training policy is handled separately"
+      ]
+    },
+    {
+      "dimension": "measurement_observability",
+      "applicable": true,
+      "weight": 15,
+      "score": 2,
+      "confidence": "LOW",
+      "reasons": [
+        "no Search Console or fixed AI-question baseline was provided"
+      ]
+    },
+    {
+      "dimension": "naver_readiness",
+      "applicable": false,
+      "weight": 10,
+      "score": null,
+      "confidence": "LOW",
+      "reasons": [
+        "Naver is not a target market for this example"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "MEASURE-001",
+      "lane": "measurement",
+      "priority": "P1",
+      "severity": "high",
+      "evidence_level": "OBSERVED",
+      "title": "No repeatable baseline",
+      "observation": "No fixed query set or search-performance baseline was available during the audit.",
+      "recommendation": "Create a versioned baseline before attributing later changes to optimization work.",
+      "verification": "Confirm baseline files contain a date range, data freshness date and fixed query set.",
+      "rollback": "Remove generated baseline artifacts if the project does not want to persist them.",
+      "source_urls": [],
+      "affected_urls": [
+        "https://example.com"
+      ],
+      "impact": "HIGH",
+      "effort": "S"
+    }
+  ],
+  "baseline": {},
+  "changes": [],
+  "verification": [
+    {
+      "check": "robots.txt reachable",
+      "status": "PASS",
+      "details": "HTTP 200"
+    }
+  ],
+  "measurement_plan": {
+    "checkpoints": [
+      "immediate technical check",
+      "~14 day directional check",
+      "~28 day comparison"
+    ],
+    "metrics": [
+      "impressions",
+      "clicks",
+      "CTR",
+      "conversions",
+      "AI source presence"
+    ]
+  },
+  "uncertainties": [
+    "Search Console and server logs were not available."
+  ],
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/bots",
+      "type": "OFFICIAL",
+      "checked_at": "2026-08-27T12:00:00+09:00"
+    },
+    {
+      "url": "https://example.com",
+      "type": "TARGET_SITE",
+      "checked_at": "2026-08-27T12:00:00+09:00"
+    }
+  ]
+}
